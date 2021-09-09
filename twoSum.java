@@ -1,15 +1,18 @@
-class twoSum {
-    public int[] twoSum1(int[] nums, int target) {
-        int start = 0; int end = nums.length - 1;
-        while(start < end) {
-            if(nums[start] + nums[end] == target) {
-                return new int[] {start, end};
-            } else if(nums[start] + nums[end] < target) {
-                start++;
+import java.util.HashMap;
+
+class twoSumArray{
+    public int[] twoSum(int [] nums, int target) {
+        if(nums == null || nums.length == 0) return new int[]{};
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++) {
+            int compliment = target - nums[i];
+            if(map.containsKey(compliment)){
+                return new int[]{map.get(compliment), i};
             } else {
-                end--;
+                map.put(nums[i], i);
             }
         }
-        throw new IllegalArgumentException("not found");
+        return new int[]{};
     }
+    
 }
