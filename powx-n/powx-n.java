@@ -1,19 +1,18 @@
 class Solution {
     public double myPow(double x, int n) {
-        //base case
-        if(n == 0) return 1;
-        
-        //logic
+        if(n == 0){
+            return 1;
+        }
         double temp = myPow(x, n/2);
         if(n % 2 == 0){
-            return temp * temp;
+            temp = temp * temp;
         } else {
-            if(n < 0){
-                return temp * temp * (1/x);
+            if(n >= 0){
+                temp = (temp * temp) * x;
             } else {
-                return temp * temp * x;
+                temp = (temp * temp) * 1/x; 
             }
         }
-        
+        return temp;
     }
 }
