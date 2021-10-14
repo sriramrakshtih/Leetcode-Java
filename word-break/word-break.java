@@ -14,7 +14,7 @@ class Solution {
             //int j = i+1;
             String sub = s.substring(0, i+1);
             // System.out.println(sub);
-            if(sub.equals(s)){
+            if(i == s.length()-1){
                 map.put(s, wordDict.contains(sub));
                 return wordDict.contains(sub)   ;
             }
