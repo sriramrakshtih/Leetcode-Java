@@ -1,41 +1,40 @@
 class Solution {
-    HashMap<Integer, List<Integer>> map;
-    int [] visited;
     public int countComponents(int n, int[][] edges) {
-        map = new HashMap<>();
-        int count = 0;
-        for(int i = 0; i < edges.length;i++){
-            if(!map.containsKey(edges[i][0])){
-                map.put(edges[i][0], new ArrayList<>());
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        for(int [] edge : edges) {
+            if(!map.containsKey(edge[0])){
+                map.put(edge[0], new ArrayList<>());
             }
-            if(!map.containsKey(edges[i][1])){
-                map.put(edges[i][1], new ArrayList<>());
+            map.get(edge[0]).add(edge[1]);
+            if(!map.containsKey(edge[1])){
+                map.put(edge[1], new ArrayList<>());
             }
-            map.get(edges[i][0]).add(edges[i][1]);
-            map.get(edges[i][1]).add(edges[i][0]);
+            map.get(edge[1]).add(edge[0]);
         }
         
-        visited = new int [n];
+        Stack<Integer> st = new Stack<>();
+        int count=0;
         
-        for(int i = 0; i < n; i++){
-            if(visited[i] == 0){
+        HashSet<Integer> visited = new HashSet<>();
+        for(int i = 0; i < n; i++) {
+            
+            if(!visited.contains(i)){
+                st.push(i);
                 count++;
-                dfs(i);
-                
+            }
+            while(!st.isEmpty()){
+                int node = st.pop();
+                visited.add(node);
+                List<Integer> neighbours = map.get(node);
+                if(neighbours != null){
+                    for(int neighbour : neighbours){
+                        if(!visited.contains(neighbour)){
+                            st.push(neighbour);
+                        }
+                    }
+                }
             }
         }
         return count;
-    }
-    
-    private void dfs(int start){
-        visited[start] = 1;
-        List<Integer> li = map.get(start);
-        if(li != null){
-            for(int i : li){
-                if(visited[i] == 0){
-                    dfs(i);
-                }
-            }    
-        }
     }
 }
