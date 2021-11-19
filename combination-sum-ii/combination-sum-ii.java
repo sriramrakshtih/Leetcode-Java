@@ -1,28 +1,26 @@
 class Solution {
     List<List<Integer>> res;
+    List<Integer> sub = new ArrayList<>();
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        res = new ArrayList<>();
-        if(candidates == null || candidates.length == 0) return res;
         Arrays.sort(candidates);
-        backtrack(candidates, target, 0, new ArrayList<>(), 0);
+        res = new ArrayList<>();
+        backtrack(candidates, target, 0);
         return res;
     }
     
-    private void backtrack(int[] candidates, int target, int currSum, List<Integer> temp, int index) {
-        
-        if(currSum == target){
-            res.add(new ArrayList<>(temp));   
+    private void backtrack(int[] nums, int target, int index) {
+        if(target == 0) {
+            res.add(new ArrayList<>(sub));
             return;
         }
         
-        if(currSum > target) return;
+        if(target < 0) return;
         
-        for(int i = index; i < candidates.length; i++) {
-            if(i > index && candidates[i] == candidates[i-1]) continue;
-    
-            temp.add(candidates[i]);
-            backtrack(candidates, target, currSum+candidates[i], temp, i+1);
-            temp.remove(temp.size()-1);
+        for(int i = index; i < nums.length; i++) {
+            if(i > index && nums[i] == nums[i-1]) continue;
+            sub.add(nums[i]);
+            backtrack(nums, target - nums[i], i+1);
+            sub.remove(sub.size() - 1);
         }
     }
 }
