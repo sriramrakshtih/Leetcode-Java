@@ -1,6 +1,8 @@
 class Solution {
+    HashMap<Integer, List<Integer>> map;
     public int countComponents(int n, int[][] edges) {
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        map = new HashMap<>();
+        int count = 0;
         for(int [] edge : edges) {
             if(!map.containsKey(edge[0])){
                 map.put(edge[0], new ArrayList<>());
@@ -12,29 +14,27 @@ class Solution {
             map.get(edge[1]).add(edge[0]);
         }
         
-        Stack<Integer> st = new Stack<>();
-        int count=0;
-        
         HashSet<Integer> visited = new HashSet<>();
+        
         for(int i = 0; i < n; i++) {
-            
             if(!visited.contains(i)){
-                st.push(i);
                 count++;
-            }
-            while(!st.isEmpty()){
-                int node = st.pop();
-                visited.add(node);
-                List<Integer> neighbours = map.get(node);
-                if(neighbours != null){
-                    for(int neighbour : neighbours){
-                        if(!visited.contains(neighbour)){
-                            st.push(neighbour);
-                        }
-                    }
-                }
+                dfs(i, visited);
             }
         }
         return count;
+    }
+    
+    private void dfs(int edge, HashSet<Integer> visited) {
+        visited.add(edge);
+        List<Integer> li = map.get(edge);
+        if(li != null) {
+            for(int nei : li) {
+                if(!visited.contains(nei)) {
+                    dfs(nei, visited);
+                }
+            }
+        }
+        
     }
 }
