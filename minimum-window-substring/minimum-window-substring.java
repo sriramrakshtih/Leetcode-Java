@@ -1,41 +1,43 @@
 class Solution {
-    public String minWindow(String s, String t) {
-        if(t.length() > s.length()) return "";
-        int begin = 0; int end = 0, head = 0;
-        int len = Integer.MAX_VALUE;
+    public String minWindow(String str, String pattern) {
         HashMap<Character, Integer> map = new HashMap<>();
-        for(char c : t.toCharArray()){
-            map.put(c, map.getOrDefault(c, 0) + 1);
+        for(int i = 0; i < pattern.length(); i++) {
+          char c = pattern.charAt(i);
+          map.put(c, map.getOrDefault(c, 0) + 1);
         }
-        
-        int counter = map.size();
-        while(end < s.length()) {
-            char endC = s.charAt(end);
-            if(map.containsKey(endC)){
-                map.put(endC, map.get(endC) - 1);
-                if(map.get(endC) == 0){
-                    counter--;
-                }
+
+       
+
+        int left = 0; int minLen = Integer.MAX_VALUE;
+        int count = 0; int head = 0;
+
+        for(int i = 0; i < str.length(); i++) {
+          char c = str.charAt(i);
+          if(map.containsKey(c)){
+            map.put(c, map.get(c) - 1);
+            if(map.get(c) == 0) {
+              count++;
             }
-            end++;
-            while(counter == 0) {
-                char beginC = s.charAt(begin);
-                if(map.containsKey(beginC)){
-                    map.put(beginC, map.get(beginC) + 1);
-                    if(map.get(beginC) > 0){
-                        counter++;
-                    }
-                }
-                
-                if(len > end-begin){
-                    len = end - begin;
-                    head = begin;
-                }
-                begin++;
+          }
+
+          if(count == map.size()) {
+            while(true) {
+              char cl = str.charAt(left);
+              if(map.containsKey(cl) && map.get(cl) < 0) {
+                map.put(cl, map.get(cl) + 1);
+                left++;
+              } else if(!map.containsKey(cl)) {
+                left++;
+              } else {
+                break;
+              }
             }
+            if(i - left + 1 < minLen) {
+                head = left;
+                minLen = i - left + 1;
+            }
+          }
         }
-        
-        if(len == Integer.MAX_VALUE) return "";
-        return s.substring(head, head+len);
+        return minLen == Integer.MAX_VALUE ? "" : str.substring(head, head + minLen);
     }
 }
